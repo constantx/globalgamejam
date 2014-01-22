@@ -1,0 +1,55 @@
+!!!
+html
+  head
+    meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+    meta(http-equiv="Content-Language", content="en-us")
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    meta(charset='utf-8')
+
+    //- mobile!
+    meta(name='viewport', content='user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width')
+
+    //- Makes your prototype chrome-less once bookmarked to your phone's home screen
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    meta(name='apple-mobile-web-app-status-bar-style', content='black')
+
+    //- Set Apple icons for when app is saved to home screen
+    //- link(rel='apple-touch-icon-precomposed', sizes='57x57',   href='/res/icon/ios/icon-57.png')
+    //- link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/res/icon/ios/icon-57-2x.png')
+
+    //- Set Apple splash screen for when app is loading
+    //- link(rel="apple-touch-startup-image", href="/res/screen/ios/screen-iphone-portrait.png", media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)")
+    //- link(rel="apple-touch-startup-image", href="/res/screen/ios/screen-iphone-portrait-2x.png", media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)")
+    //- link(rel="apple-touch-startup-image", href="/res/screen/ios/screen-iphone-portrait-568h.png", media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)")
+
+    meta(name="keywords", content="")
+    meta(name="description", content="")
+    meta(name="author", content="")
+    meta(name="copyright", content="")
+
+    //- facebook open graph protocol
+    meta(property="og:site_name", content="basement")
+    meta(property="og:title", content="constantx basement grid styleguide")
+    meta(property="og:type", content="website")
+    meta(property="og:url", content="http://constantx.github.io/basement")
+    meta(property="og:image", content="")
+    meta(property="fb:page_id", content="")
+    meta(property="og:description", content="")
+
+    //- CSS
+    link(rel='stylesheet', href='/css/main.css')
+    link(rel='stylesheet', href='/css/main.css')
+
+    //- require.js and run main.js
+    script(src="/socket.io/socket.io.js")
+
+    title basement
+
+  body
+    .container
+      #game-container
+
+    script(src="/js/libs/phaser.js")
+    script(src="/build/build.js")
+    script.
+      require('boot')

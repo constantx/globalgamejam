@@ -1,0 +1,10 @@
+{
+  "name": "constantx",
+  "description": "constantx's sandbox",
+  "paths": [
+    "./public/js/"
+  ],
+  "local": [
+    "boot"
+  ]
+}
