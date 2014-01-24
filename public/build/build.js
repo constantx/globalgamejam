@@ -255,6 +255,126 @@ require.register("jb55-domready/index.js", Function("exports, require, module",
     })\n\
 })//@ sourceURL=jb55-domready/index.js"
 ));
+require.register("component-type/index.js", Function("exports, require, module",
+"/**\n\
+ * toString ref.\n\
+ */\n\
+\n\
+var toString = Object.prototype.toString;\n\
+\n\
+/**\n\
+ * Return the type of `val`.\n\
+ *\n\
+ * @param {Mixed} val\n\
+ * @return {String}\n\
+ * @api public\n\
+ */\n\
+\n\
+module.exports = function(val){\n\
+  switch (toString.call(val)) {\n\
+    case '[object Date]': return 'date';\n\
+    case '[object RegExp]': return 'regexp';\n\
+    case '[object Arguments]': return 'arguments';\n\
+    case '[object Array]': return 'array';\n\
+    case '[object Error]': return 'error';\n\
+  }\n\
+\n\
+  if (val === null) return 'null';\n\
+  if (val === undefined) return 'undefined';\n\
+  if (val !== val) return 'nan';\n\
+  if (val && val.nodeType === 1) return 'element';\n\
+\n\
+  return typeof val.valueOf();\n\
+};\n\
+//@ sourceURL=component-type/index.js"
+));
+require.register("component-each/index.js", Function("exports, require, module",
+"\n\
+/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
+var toFunction = require('to-function');\n\
+var type;\n\
+\n\
+try {\n\
+  type = require('type-component');\n\
+} catch (e) {\n\
+  type = require('type');\n\
+}\n\
+\n\
+/**\n\
+ * HOP reference.\n\
+ */\n\
+\n\
+var has = Object.prototype.hasOwnProperty;\n\
+\n\
+/**\n\
+ * Iterate the given `obj` and invoke `fn(val, i)`.\n\
+ *\n\
+ * @param {String|Array|Object} obj\n\
+ * @param {Function} fn\n\
+ * @api public\n\
+ */\n\
+\n\
+module.exports = function(obj, fn){\n\
+  fn = toFunction(fn);\n\
+  switch (type(obj)) {\n\
+    case 'array':\n\
+      return array(obj, fn);\n\
+    case 'object':\n\
+      if ('number' == typeof obj.length) return array(obj, fn);\n\
+      return object(obj, fn);\n\
+    case 'string':\n\
+      return string(obj, fn);\n\
+  }\n\
+};\n\
+\n\
+/**\n\
+ * Iterate string chars.\n\
+ *\n\
+ * @param {String} obj\n\
+ * @param {Function} fn\n\
+ * @api private\n\
+ */\n\
+\n\
+function string(obj, fn) {\n\
+  for (var i = 0; i < obj.length; ++i) {\n\
+    fn(obj.charAt(i), i);\n\
+  }\n\
+}\n\
+\n\
+/**\n\
+ * Iterate object keys.\n\
+ *\n\
+ * @param {Object} obj\n\
+ * @param {Function} fn\n\
+ * @api private\n\
+ */\n\
+\n\
+function object(obj, fn) {\n\
+  for (var key in obj) {\n\
+    if (has.call(obj, key)) {\n\
+      fn(key, obj[key]);\n\
+    }\n\
+  }\n\
+}\n\
+\n\
+/**\n\
+ * Iterate array-ish.\n\
+ *\n\
+ * @param {Array|Object} obj\n\
+ * @param {Function} fn\n\
+ * @api private\n\
+ */\n\
+\n\
+function array(obj, fn) {\n\
+  for (var i = 0; i < obj.length; ++i) {\n\
+    fn(obj[i], i);\n\
+  }\n\
+}\n\
+//@ sourceURL=component-each/index.js"
+));
 require.register("component-event/index.js", Function("exports, require, module",
 "var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',\n\
     unbind = window.removeEventListener ? 'removeEventListener' : 'detachEvent',\n\
@@ -1046,7 +1166,7 @@ module.exports = prop;\n\
  */\n\
 \n\
 var cssProps = {\n\
-  'float': 'cssFloat'\n\
+  'float': 'cssFloat' in document.body.style ? 'cssFloat' : 'styleFloat'\n\
 };\n\
 \n\
 /**\n\
@@ -1214,6 +1334,7 @@ require.register("component-css/lib/hooks.js", Function("exports, require, modul
  * Module Dependencies\n\
  */\n\
 \n\
+var each = require('each');\n\
 var css = require('./css');\n\
 var cssShow = { position: 'absolute', visibility: 'hidden', display: 'block' };\n\
 var pnum = (/[+-]?(?:\\d*\\.|)\\d+(?:[eE][+-]?\\d+|)/).source;\n\
@@ -1230,7 +1351,7 @@ var cssExpand = [ \"Top\", \"Right\", \"Bottom\", \"Left\" ];\n\
  * Height & Width\n\
  */\n\
 \n\
-['width', 'height'].forEach(function(name) {\n\
+each(['width', 'height'], function(name) {\n\
   exports[name] = {};\n\
 \n\
   exports[name].get = function(el, compute, extra) {\n\
@@ -1388,7 +1509,11 @@ module.exports = styles;\n\
  */\n\
 \n\
 function styles(el) {\n\
-  return el.ownerDocument.defaultView.getComputedStyle(el, null);\n\
+  if (window.getComputedStyle) {\n\
+    return el.ownerDocument.defaultView.getComputedStyle(el, null);\n\
+  } else {\n\
+    return el.currentStyle;\n\
+  }\n\
 }\n\
 //@ sourceURL=component-css/lib/styles.js"
 ));
@@ -1561,10 +1686,16 @@ module.exports = computed;\n\
  */\n\
 \n\
 function computed(el, prop, precomputed) {\n\
-  computed = precomputed || styles(el);\n\
+  var computed = precomputed || styles(el);\n\
+  var ret;\n\
+  \n\
   if (!computed) return;\n\
 \n\
-  var ret = computed.getPropertyValue(prop) || computed[prop];\n\
+  if (computed.getPropertyValue) {\n\
+    ret = computed.getPropertyValue(prop) || computed[prop];\n\
+  } else {\n\
+    ret = computed[prop];\n\
+  }\n\
 \n\
   if ('' === ret && !withinDocument(el)) {\n\
     debug('element not within document, try finding from style attribute');\n\
@@ -1579,39 +1710,6 @@ function computed(el, prop, precomputed) {\n\
   return undefined === ret ? ret : ret + '';\n\
 }\n\
 //@ sourceURL=component-css/lib/computed.js"
-));
-require.register("component-type/index.js", Function("exports, require, module",
-"/**\n\
- * toString ref.\n\
- */\n\
-\n\
-var toString = Object.prototype.toString;\n\
-\n\
-/**\n\
- * Return the type of `val`.\n\
- *\n\
- * @param {Mixed} val\n\
- * @return {String}\n\
- * @api public\n\
- */\n\
-\n\
-module.exports = function(val){\n\
-  switch (toString.call(val)) {\n\
-    case '[object Date]': return 'date';\n\
-    case '[object RegExp]': return 'regexp';\n\
-    case '[object Arguments]': return 'arguments';\n\
-    case '[object Array]': return 'array';\n\
-    case '[object Error]': return 'error';\n\
-  }\n\
-\n\
-  if (val === null) return 'null';\n\
-  if (val === undefined) return 'undefined';\n\
-  if (val !== val) return 'nan';\n\
-  if (val && val.nodeType === 1) return 'element';\n\
-\n\
-  return typeof val.valueOf();\n\
-};\n\
-//@ sourceURL=component-type/index.js"
 ));
 require.register("component-value/index.js", Function("exports, require, module",
 "\n\
@@ -1712,7 +1810,8 @@ function type(el) {\n\
 //@ sourceURL=component-value/index.js"
 ));
 require.register("component-query/index.js", Function("exports, require, module",
-"function one(selector, el) {\n\
+"\n\
+function one(selector, el) {\n\
   return el.querySelector(selector);\n\
 }\n\
 \n\
@@ -1731,7 +1830,6 @@ exports.engine = function(obj){\n\
   if (!obj.all) throw new Error('.all callback required');\n\
   one = obj.one;\n\
   exports.all = obj.all;\n\
-  return exports;\n\
 };\n\
 //@ sourceURL=component-query/index.js"
 ));
@@ -2096,6 +2194,31 @@ function get(str) {\n\
 }\n\
 //@ sourceURL=component-to-function/index.js"
 ));
+require.register("matthewp-keys/index.js", Function("exports, require, module",
+"module.exports = Object.keys || function(obj){\n\
+  var keys = [];\n\
+\n\
+  for (var key in obj) {\n\
+    if (obj.hasOwnProperty(key)) {\n\
+      keys.push(key);\n\
+    }\n\
+  }\n\
+\n\
+  return keys;\n\
+};//@ sourceURL=matthewp-keys/index.js"
+));
+require.register("matthewp-text/index.js", Function("exports, require, module",
+"\n\
+var text = 'innerText' in document.createElement('div')\n\
+  ? 'innerText'\n\
+  : 'textContent'\n\
+\n\
+module.exports = function (el, val) {\n\
+  if (val == null) return el[text];\n\
+  el[text] = val;\n\
+};\n\
+//@ sourceURL=matthewp-text/index.js"
+));
 require.register("component-dom/index.js", Function("exports, require, module",
 "/**\n\
  * Module dependencies.\n\
@@ -2103,7 +2226,9 @@ require.register("component-dom/index.js", Function("exports, require, module",
 \n\
 var isArray = require('isArray');\n\
 var domify = require('domify');\n\
+var each = require('each');\n\
 var events = require('event');\n\
+var getKeys = require('keys');\n\
 var query = require('query');\n\
 var trim = require('trim');\n\
 var slice = [].slice;\n\
@@ -2225,7 +2350,7 @@ dom.use = function(name, fn) {\n\
     tmp[name] = fn;\n\
     fn = tmp;\n\
   } else {\n\
-    keys = Object.keys(name);\n\
+    keys = getKeys(name);\n\
     fn = name;\n\
   }\n\
 \n\
@@ -2284,7 +2409,7 @@ List.prototype.toArray = function() {\n\
  * Attribute accessors.\n\
  */\n\
 \n\
-attrs.forEach(function(name){\n\
+each(attrs, function(name){\n\
   List.prototype[name] = function(val){\n\
     if (0 == arguments.length) return this.attr(name);\n\
     return this.attr(name, val);\n\
@@ -2325,6 +2450,7 @@ require.register("component-dom/lib/traverse.js", Function("exports, require, mo
  */\n\
 \n\
 var proto = Array.prototype;\n\
+var each = require('each');\n\
 var traverse = require('traverse');\n\
 var toFunction = require('to-function');\n\
 var matches = require('matches-selector');\n\
@@ -2591,7 +2717,7 @@ exports.last = function(){\n\
  * Mixin the array functions\n\
  */\n\
 \n\
-[\n\
+each([\n\
   'push',\n\
   'pop',\n\
   'shift',\n\
@@ -2603,12 +2729,11 @@ exports.last = function(){\n\
   'concat',\n\
   'join',\n\
   'slice'\n\
-].forEach(function(method) {\n\
+], function(method) {\n\
   exports[method] = function() {\n\
     return proto[method].apply(this.toArray(), arguments);\n\
   };\n\
 });\n\
-\n\
 //@ sourceURL=component-dom/lib/traverse.js"
 ));
 require.register("component-dom/lib/manipulate.js", Function("exports, require, module",
@@ -2618,6 +2743,7 @@ require.register("component-dom/lib/manipulate.js", Function("exports, require, 
 \n\
 var value = require('value');\n\
 var css = require('css');\n\
+var text = require('text');\n\
 \n\
 /**\n\
  * Return element text.\n\
@@ -2630,15 +2756,23 @@ var css = require('css');\n\
 exports.text = function(str) {\n\
   if (1 == arguments.length) {\n\
     return this.forEach(function(el) {\n\
-      var node = document.createTextNode(str);\n\
-      el.textContent = '';\n\
-      el.appendChild(node);\n\
+      if (11 == el.nodeType) {\n\
+        var node;\n\
+        while (node = el.firstChild) el.removeChild(node);\n\
+        el.appendChild(document.createTextNode(str));\n\
+      } else {\n\
+        text(el, str);\n\
+      }\n\
     });\n\
   }\n\
 \n\
   var out = '';\n\
   this.forEach(function(el) {\n\
-    out += getText(el);\n\
+    if (11 == el.nodeType) {\n\
+      out += getText(el.firstChild);\n\
+    } else {\n\
+      out += text(el);\n\
+    }\n\
   });\n\
 \n\
   return out;\n\
@@ -2661,9 +2795,10 @@ function getText(el) {\n\
   switch(type) {\n\
     case 1:\n\
     case 9:\n\
+      ret = text(el);\n\
+      break;\n\
     case 11:\n\
-      if ('string' == typeof el.textContent) return el.textContent;\n\
-      for (el = el.firstChild; el; el = el.nextSibling) ret += text(el);\n\
+      ret = el.textContent || el.innerText;\n\
       break;\n\
     case 3:\n\
     case 4:\n\
@@ -2843,7 +2978,7 @@ exports.replace = function(val) {\n\
 \n\
 exports.empty = function() {\n\
   return this.forEach(function(el) {\n\
-    el.textContent = '';\n\
+    text(el, \"\");\n\
   });\n\
 };\n\
 \n\
@@ -3116,7 +3251,8 @@ exports.off = function(event, selector, fn, capture){\n\
 //@ sourceURL=component-dom/lib/events.js"
 ));
 require.register("boot/index.js", Function("exports, require, module",
-"/* jshint indent:2, devel:true */\n\
+"/* jshint indent:2, devel:true, browser:true */\n\
+/*global Phaser:true */\n\
 \n\
 (function () {\n\
 \n\
@@ -3124,28 +3260,74 @@ require.register("boot/index.js", Function("exports, require, module",
 \n\
   var dom = require('dom');\n\
   var domready = require('domready');\n\
+  var socket = window.io.connect(window.location.hostname);\n\
 \n\
   domready(function() {\n\
 \n\
-    var game = new Phaser.Game(1024, 640, Phaser.AUTO, 'game-container', {\n\
+    var game = new Phaser.Game(1024*2, 640*2, Phaser.CANVAS, 'game-container', {\n\
       preload: preload,\n\
-      create: create\n\
+      create: create,\n\
+      update: update,\n\
+      render: render\n\
     }, true);\n\
 \n\
+    /**\n\
+     * preload is run once before the game start\n\
+     * @return {[type]} [description]\n\
+     */\n\
     function preload () {\n\
+      console.log('>> preload');\n\
       game.load.image('logo', 'img/phaser.png');\n\
     }\n\
 \n\
+    /**\n\
+     * The create function is called automatically once the preload has finished\n\
+     */\n\
+\n\
     function create () {\n\
+      console.log('>> create');\n\
       var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');\n\
       logo.anchor.setTo(0.5, 0.5);\n\
+\n\
+      // socket it up\n\
+      socket.emit(\"game:join\");\n\
+      socket.on(\"player:welcome\", function(res) {\n\
+        // console.log('player:welcome', res);\n\
+\n\
+        if (res && res.total_player) {\n\
+          var text = \"Online: \" + res.total_player;\n\
+          var style = { font: \"20px Monaco\", fill: \"#323232\", align: \"left\" };\n\
+          var t = game.add.text(10, 10, text, style);\n\
+        }\n\
+      });\n\
     }\n\
 \n\
+\n\
+    /**\n\
+     * The update (and render) functions are called every frame. So on a desktop that'd be around 60 time per second. In update this is where you'd do things like poll for input to move a player, check for object collision, etc. It's the heart of your game really.\n\
+     */\n\
+    function update() {\n\
+      console.log('>> update');\n\
+    }\n\
+\n\
+\n\
+    /**\n\
+     * The render function is called AFTER the WebGL/canvas render has taken place, so consider it the place to apply post-render effects or extra debug overlays. For example when building a game I will often put the game into CANVAS mode only and then use the render function to draw lots of debug info over the top of my game.\n\
+     */\n\
+    function render() {\n\
+      console.log('>> render');\n\
+    }\n\
   });\n\
 \n\
 }());\n\
 //@ sourceURL=boot/index.js"
 ));
+
+
+
+
+
+
 
 
 
@@ -3187,6 +3369,13 @@ require.alias("component-dom/lib/manipulate.js", "boot/deps/dom/lib/manipulate.j
 require.alias("component-dom/lib/classes.js", "boot/deps/dom/lib/classes.js");
 require.alias("component-dom/lib/attributes.js", "boot/deps/dom/lib/attributes.js");
 require.alias("component-dom/lib/events.js", "boot/deps/dom/lib/events.js");
+require.alias("component-each/index.js", "component-dom/deps/each/index.js");
+require.alias("component-to-function/index.js", "component-each/deps/to-function/index.js");
+require.alias("component-props/index.js", "component-to-function/deps/props/index.js");
+require.alias("component-props/index.js", "component-to-function/deps/props/index.js");
+require.alias("component-props/index.js", "component-props/index.js");
+require.alias("component-type/index.js", "component-each/deps/type/index.js");
+
 require.alias("component-event/index.js", "component-dom/deps/event/index.js");
 
 require.alias("component-delegate/index.js", "component-dom/deps/delegate/index.js");
@@ -3211,6 +3400,13 @@ require.alias("component-css/lib/vendor.js", "component-dom/deps/css/lib/vendor.
 require.alias("component-css/lib/support.js", "component-dom/deps/css/lib/support.js");
 require.alias("component-css/lib/computed.js", "component-dom/deps/css/lib/computed.js");
 require.alias("component-css/index.js", "component-dom/deps/css/index.js");
+require.alias("component-each/index.js", "component-css/deps/each/index.js");
+require.alias("component-to-function/index.js", "component-each/deps/to-function/index.js");
+require.alias("component-props/index.js", "component-to-function/deps/props/index.js");
+require.alias("component-props/index.js", "component-to-function/deps/props/index.js");
+require.alias("component-props/index.js", "component-props/index.js");
+require.alias("component-type/index.js", "component-each/deps/type/index.js");
+
 require.alias("visionmedia-debug/index.js", "component-css/deps/debug/index.js");
 require.alias("visionmedia-debug/debug.js", "component-css/deps/debug/debug.js");
 
@@ -3245,4 +3441,9 @@ require.alias("component-to-function/index.js", "component-dom/deps/to-function/
 require.alias("component-props/index.js", "component-to-function/deps/props/index.js");
 require.alias("component-props/index.js", "component-to-function/deps/props/index.js");
 require.alias("component-props/index.js", "component-props/index.js");
+require.alias("matthewp-keys/index.js", "component-dom/deps/keys/index.js");
+require.alias("matthewp-keys/index.js", "component-dom/deps/keys/index.js");
+require.alias("matthewp-keys/index.js", "matthewp-keys/index.js");
+require.alias("matthewp-text/index.js", "component-dom/deps/text/index.js");
+
 require.alias("boot/index.js", "boot/index.js");

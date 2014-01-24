@@ -3,7 +3,7 @@
 (function() {
   "use strict";
 
-  var IO, PORT, app, express, fs, http, path, routes, server;
+  var IO, PORT, app, express, fs, http, path, routes, server, players;
 
   require('coffee-script');
 
@@ -26,6 +26,9 @@
   IO = require("socket.io").listen(server);
 
   PORT = process.env.PORT || 5000;
+
+  // keep track of players with sockets
+  players = {};
 
   app.configure(function() {
     app.set("port", process.env.PORT || PORT);
@@ -79,9 +82,19 @@
   });
 
   IO.sockets.on("connection", function(socket) {
-    socket.on("player:join", function() {
-      console.log('new player joined');
+    players[socket.id] = socket;
+
+    socket.on("game:join", function() {
+      socket.emit("player:welcome", {
+        total_player : Object.keys(players).length
+      });
     });
+    return;
+  });
+
+  IO.sockets.on("disconnect", function(socket) {
+    delete players[socket.id];
+
     return;
   });
 

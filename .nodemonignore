@@ -2,10 +2,11 @@
 *.css
 *.styl
 *.jade
-*.js
-.slugignore
-app/public/*
 readme*
 Gruntfile*
 Makefile*
 Procfile*
+.slugignore
+.git
+public/js/**/*.js
+public/build/*.js

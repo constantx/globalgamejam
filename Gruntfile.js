@@ -7,7 +7,7 @@
     grunt.initConfig({
       pkg: "<json:package.json>",
       dirs: {
-        app: "./"
+        app: "."
       },
       meta: {
         name: "<%= pkg.name %>",
@@ -48,7 +48,19 @@
         dev: {
           options: {
             file: 'server.js',
-            ignoredFiles: ["*.css", "*.styl", "*.jade", "*.js", ".slugignore", "app/public/*", "readme*", "Gruntfile*", "Makefile*", "Procfile*"],
+            ignoredFiles: [
+              "*.css",
+              "*.styl",
+              "*.jade",
+              "readme*",
+              "Gruntfile*",
+              "Makefile*",
+              "Procfile*",
+              ".slugignore",
+              ".git",
+              "public/js/**/*.js",
+              "public/build/*.js"
+            ],
             debug: true,
             delayTime: 1
           }
@@ -84,7 +96,7 @@
           }
         },
         compile: {
-          tasks: ['stylus']
+          tasks: ['stylus', 'componentbuild']
         }
       },
       watch: {
@@ -101,8 +113,8 @@
           tasks: ["jshint"]
         },
         component: {
-          files: "./public/js/**/*.js",
-          tasks: ["componentbuild"]
+          files: "<%= jshint.files %>",
+          tasks: ["compile"]
         }
       }
     });
