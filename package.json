@@ -22,7 +22,6 @@
     "nodemon": "~0.7.1",
     "esprima": "latest",
     "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.1.1",
     "grunt-contrib-concat": "~0.2.0",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-contrib-watch": "~0.3.1",
@@ -36,6 +35,7 @@
     "matchdep": "latest",
     "should": "~1.2.2",
     "mocha": "~1.12.0",
-    "grunt-component-build": "~0.4.2"
+    "grunt-component-build": "~0.4.2",
+    "grunt-contrib-jshint": "~0.8.0"
   }
 }

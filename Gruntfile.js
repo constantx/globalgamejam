@@ -1,4 +1,5 @@
 /* jshint node:true */
+
 (function() {
   "use strict";
 
@@ -19,7 +20,13 @@
             require: true
           }
         },
-        files: ["*.js", "!public/js/libs/*.js"]
+        files: [
+          "**/*.js",
+          "!public/build/*.js",
+          "!public/js/libs/*.js",
+          "!node_modules/**/*.js",
+          "!components/**/*.js"
+        ]
       },
       stylus: {
         app: {
