@@ -3370,10 +3370,11 @@ require.register("boot/index.js", Function("exports, require, module",
   var Enemy = require('enemy');\n\
   var HUD = require('hud');\n\
   var utils = require('utils');\n\
+  var emitterEnemy;\n\
 \n\
   domready(function() {\n\
 \n\
-    var game = new Phaser.Game(1024*2, 640*2, Phaser.CANVAS, 'game-container', {\n\
+    var game = new Phaser.Game(800*2, 640*2, Phaser.CANVAS, 'game-container', {\n\
       preload: preload,\n\
       create: create,\n\
       update: update,\n\
@@ -3386,7 +3387,8 @@ require.register("boot/index.js", Function("exports, require, module",
      */\n\
     function preload () {\n\
       utils.log('>> phaser preload');\n\
-      game.load.image('logo', 'img/phaser.png');\n\
+\n\
+      game.load.image('space-invader', 'img/enemy.png');\n\
     }\n\
 \n\
     /**\n\
@@ -3396,9 +3398,21 @@ require.register("boot/index.js", Function("exports, require, module",
     function create () {\n\
       utils.log('>> phaser create');\n\
 \n\
-      var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');\n\
-      logo.anchor.setTo(0.5, 0.5);\n\
+      // emitter(x, y, maxParticles) → {Phaser.Emitter}\n\
+      emitterEnemy = game.add.emitter(game.world.centerX, 0);\n\
+      // makeParticles(keys, frames, quantity, collide, collideWorldBounds)\n\
+      emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);\n\
+      emitterEnemy.minParticleSpeed.setTo(-500, -100);\n\
+      emitterEnemy.maxParticleSpeed.setTo(200, 500);\n\
+      emitterEnemy.maxRotation = 10;\n\
+      emitterEnemy.gravity = 20;\n\
+      emitterEnemy.bounce.setTo(0.2, 0.2);\n\
+      emitterEnemy.angularDrag = 180;\n\
 \n\
+      // start(explode, lifespan, frequency, quantity)\n\
+      emitterEnemy.start(false, 3000, 300);\n\
+\n\
+      // create the hud\n\
       var hud = new HUD(game).init();\n\
 \n\
       // tell the server there's a new player\n\
@@ -3416,7 +3430,9 @@ require.register("boot/index.js", Function("exports, require, module",
 \n\
       socket.on(\"game:tweet\", function(tweet) {\n\
         var newEnemy = new Enemy(tweet);\n\
+        emitterEnemy.add(enemySprite);\n\
       });\n\
+\n\
     }\n\
 \n\
 \n\
@@ -3424,7 +3440,14 @@ require.register("boot/index.js", Function("exports, require, module",
      * The update (and render) functions are called every frame. So on a desktop that'd be around 60 time per second. In update this is where you'd do things like poll for input to move a player, check for object collision, etc. It's the heart of your game really.\n\
      */\n\
     function update() {\n\
-      // utils.log('>> update');\n\
+      utils.log('>> update');\n\
+\n\
+      // make enemy collidable\n\
+      game.physics.collide(emitterEnemy, emitterEnemy);\n\
+\n\
+      // rotate the angle to spray everywhere\n\
+      // emitterEnemy.angle += 0.1;\n\
+      // if(emitterEnemy.angle >=360) emitterEnemy.angle = 0;\n\
     }\n\
 \n\
 \n\

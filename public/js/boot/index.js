@@ -11,10 +11,11 @@
   var Enemy = require('enemy');
   var HUD = require('hud');
   var utils = require('utils');
+  var emitterEnemy;
 
   domready(function() {
 
-    var game = new Phaser.Game(1024*2, 640*2, Phaser.CANVAS, 'game-container', {
+    var game = new Phaser.Game(800*2, 640*2, Phaser.CANVAS, 'game-container', {
       preload: preload,
       create: create,
       update: update,
@@ -27,7 +28,8 @@
      */
     function preload () {
       utils.log('>> phaser preload');
-      game.load.image('logo', 'img/phaser.png');
+
+      game.load.image('space-invader', 'img/enemy.png');
     }
 
     /**
@@ -37,9 +39,21 @@
     function create () {
       utils.log('>> phaser create');
 
-      var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
-      logo.anchor.setTo(0.5, 0.5);
+      // emitter(x, y, maxParticles) → {Phaser.Emitter}
+      emitterEnemy = game.add.emitter(game.world.centerX, 0);
+      // makeParticles(keys, frames, quantity, collide, collideWorldBounds)
+      emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);
+      emitterEnemy.minParticleSpeed.setTo(-500, -100);
+      emitterEnemy.maxParticleSpeed.setTo(200, 500);
+      emitterEnemy.maxRotation = 10;
+      emitterEnemy.gravity = 20;
+      emitterEnemy.bounce.setTo(0.2, 0.2);
+      emitterEnemy.angularDrag = 180;
 
+      // start(explode, lifespan, frequency, quantity)
+      emitterEnemy.start(false, 3000, 300);
+
+      // create the hud
       var hud = new HUD(game).init();
 
       // tell the server there's a new player
@@ -57,7 +71,9 @@
 
       socket.on("game:tweet", function(tweet) {
         var newEnemy = new Enemy(tweet);
+        emitterEnemy.add(enemySprite);
       });
+
     }
 
 
@@ -65,7 +81,14 @@
      * The update (and render) functions are called every frame. So on a desktop that'd be around 60 time per second. In update this is where you'd do things like poll for input to move a player, check for object collision, etc. It's the heart of your game really.
      */
     function update() {
-      // utils.log('>> update');
+      utils.log('>> update');
+
+      // make enemy collidable
+      game.physics.collide(emitterEnemy, emitterEnemy);
+
+      // rotate the angle to spray everywhere
+      // emitterEnemy.angle += 0.1;
+      // if(emitterEnemy.angle >=360) emitterEnemy.angle = 0;
     }
 
 
