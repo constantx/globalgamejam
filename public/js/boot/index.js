@@ -9,6 +9,7 @@
   var domready = require('domready');
   var socket = window.io.connect(window.location.hostname);
   var Enemy = require('enemy');
+  var HUD = require('hud');
 
   domready(function() {
 
@@ -34,19 +35,23 @@
 
     function create () {
       console.log('>> create');
+
       var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
       logo.anchor.setTo(0.5, 0.5);
 
-      // socket it up
-      socket.emit("game:join");
-      socket.on("player:welcome", function(res) {
-        // console.log('player:welcome', res);
+      var hud = new HUD(game).init();
 
-        if (res && res.total_player) {
-          var text = "Online: " + res.total_player;
-          var style = { font: "20px Monaco", fill: "#323232", align: "left" };
-          var t = game.add.text(10, 10, text, style);
-        }
+      // tell the server there's a new player
+      socket.emit("player:join");
+
+      // listen for welcome message
+      socket.on("player:welcome", function(status){
+        hud.update(status);
+      });
+
+      // listen for disconnect message
+      socket.on("player:disconnect", function(status){
+        hud.update(status);
       });
 
       socket.on("game:tweet", function(tweet) {

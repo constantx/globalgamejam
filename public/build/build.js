@@ -3250,6 +3250,9 @@ exports.off = function(event, selector, fn, capture){\n\
 };\n\
 //@ sourceURL=component-dom/lib/events.js"
 ));
+require.register("utils/index.js", Function("exports, require, module",
+"//@ sourceURL=utils/index.js"
+));
 require.register("enemy/index.js", Function("exports, require, module",
 "/**\n\
  * module for an enemy model\n\
@@ -3289,6 +3292,55 @@ module.exports = function(tweet){\n\
 };\n\
 //@ sourceURL=enemy/index.js"
 ));
+require.register("hud/index.js", Function("exports, require, module",
+"/**\n\
+ * PHASER GAME HUD\n\
+ */\n\
+\n\
+module.exports = function(game) {\n\
+  return {\n\
+\n\
+    style: {\n\
+      font: \"20px Monaco\",\n\
+      fill: \"#323232\",\n\
+      align: \"left\"\n\
+    },\n\
+\n\
+\n\
+    text: function(status) {\n\
+      var text = \"\";\n\
+\n\
+      if (status) {\n\
+        text = [\n\
+          \"Online: \" + status.total_player,\n\
+          \"-------------------------------\"\n\
+        ].join(\"\\n\
+\");\n\
+      }\n\
+\n\
+      return text;\n\
+    },\n\
+\n\
+\n\
+    init: function(){\n\
+      console.log('hud#init');\n\
+      this.t = game.add.text(10, 10, this.text(), this.style);\n\
+      return this;\n\
+    },\n\
+\n\
+\n\
+    update: function(status) {\n\
+      console.log('hud#update', status);\n\
+      if (status) {\n\
+        this.t.setText(this.text(status));\n\
+        console.log(this.t);\n\
+      }\n\
+      return this;\n\
+    }\n\
+  };\n\
+};\n\
+//@ sourceURL=hud/index.js"
+));
 require.register("boot/index.js", Function("exports, require, module",
 "/* jshint indent:2, devel:true, browser:true */\n\
 /*global Phaser:true */\n\
@@ -3301,6 +3353,7 @@ require.register("boot/index.js", Function("exports, require, module",
   var domready = require('domready');\n\
   var socket = window.io.connect(window.location.hostname);\n\
   var Enemy = require('enemy');\n\
+  var HUD = require('hud');\n\
 \n\
   domready(function() {\n\
 \n\
@@ -3326,19 +3379,23 @@ require.register("boot/index.js", Function("exports, require, module",
 \n\
     function create () {\n\
       console.log('>> create');\n\
+\n\
       var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');\n\
       logo.anchor.setTo(0.5, 0.5);\n\
 \n\
-      // socket it up\n\
-      socket.emit(\"game:join\");\n\
-      socket.on(\"player:welcome\", function(res) {\n\
-        // console.log('player:welcome', res);\n\
+      var hud = new HUD(game).init();\n\
 \n\
-        if (res && res.total_player) {\n\
-          var text = \"Online: \" + res.total_player;\n\
-          var style = { font: \"20px Monaco\", fill: \"#323232\", align: \"left\" };\n\
-          var t = game.add.text(10, 10, text, style);\n\
-        }\n\
+      // tell the server there's a new player\n\
+      socket.emit(\"player:join\");\n\
+\n\
+      // listen for welcome message\n\
+      socket.on(\"player:welcome\", function(status){\n\
+        hud.update(status);\n\
+      });\n\
+\n\
+      // listen for disconnect message\n\
+      socket.on(\"player:disconnect\", function(status){\n\
+        hud.update(status);\n\
       });\n\
 \n\
       socket.on(\"game:tweet\", function(tweet) {\n\
@@ -3366,6 +3423,10 @@ require.register("boot/index.js", Function("exports, require, module",
 }());\n\
 //@ sourceURL=boot/index.js"
 ));
+
+
+
+
 
 
 
@@ -3492,7 +3553,13 @@ require.alias("matthewp-keys/index.js", "component-dom/deps/keys/index.js");
 require.alias("matthewp-keys/index.js", "matthewp-keys/index.js");
 require.alias("matthewp-text/index.js", "component-dom/deps/text/index.js");
 
+require.alias("utils/index.js", "boot/deps/utils/index.js");
+require.alias("utils/index.js", "boot/deps/utils/index.js");
+require.alias("utils/index.js", "utils/index.js");
 require.alias("enemy/index.js", "boot/deps/enemy/index.js");
 require.alias("enemy/index.js", "boot/deps/enemy/index.js");
 require.alias("enemy/index.js", "enemy/index.js");
+require.alias("hud/index.js", "boot/deps/hud/index.js");
+require.alias("hud/index.js", "boot/deps/hud/index.js");
+require.alias("hud/index.js", "hud/index.js");
 require.alias("boot/index.js", "boot/index.js");

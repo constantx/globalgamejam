@@ -96,11 +96,31 @@
   io.sockets.on("connection", function(socket) {
     players[socket.id] = socket;
 
-    socket.on("game:join", function() {
-      socket.emit("player:welcome", {
+    /**
+     * when a new player join
+     * @return {[type]} [description]
+     */
+    socket.on("player:join", function() {
+      io.sockets.emit("player:welcome", {
         total_player : Object.keys(players).length
       });
     });
+
+    /**
+     * remove player when disconnect
+     */
+    socket.on("disconnect", function() {
+      // remove player from pool
+      delete players[socket.id];
+
+      // tell other players about it
+      io.sockets.emit("player:disconnect", {
+        total_player : Object.keys(players).length
+      });
+
+      return;
+    });
+
     return;
   });
 
@@ -110,16 +130,6 @@
    */
   stream.on('tweet', function (tweet) {
     io.sockets.emit("game:tweet", tweet);
-  });
-
-
-  /**
-   * remove player when disconnect
-   */
-  io.sockets.on("disconnect", function(socket) {
-    delete players[socket.id];
-
-    return;
   });
 
 }).call(this);

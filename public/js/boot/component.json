@@ -6,7 +6,8 @@
     "index.js"
   ],
   "local": [
-    "enemy"
+    "enemy",
+    "hud"
   ],
   "dependencies": {
     "jb55/domready": "*",
