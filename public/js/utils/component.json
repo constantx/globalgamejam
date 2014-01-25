@@ -1,16 +1,13 @@
 {
-  "name": "hud",
-  "repo": "constantx/hud",
-  "description": "phaser HUD",
+  "name": "utils",
+  "repo": "constantx/utils",
+  "description": "component utility",
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {},
   "development": {},
   "license": "MIT",
   "main": "index.js",
-  "local": [
-    "utils"
-  ],
   "scripts": [
     "index.js"
   ]

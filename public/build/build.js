@@ -3251,7 +3251,22 @@ exports.off = function(event, selector, fn, capture){\n\
 //@ sourceURL=component-dom/lib/events.js"
 ));
 require.register("utils/index.js", Function("exports, require, module",
-"//@ sourceURL=utils/index.js"
+"var utils;\n\
+var debug = true;\n\
+\n\
+function init() {\n\
+  return {\n\
+    log: function() {\n\
+      if(debug){\n\
+        console.log.apply(console, arguments);\n\
+      }\n\
+    }\n\
+  };\n\
+}\n\
+\n\
+\n\
+module.exports = init();\n\
+//@ sourceURL=utils/index.js"
 ));
 require.register("enemy/index.js", Function("exports, require, module",
 "/**\n\
@@ -3296,6 +3311,7 @@ require.register("hud/index.js", Function("exports, require, module",
 "/**\n\
  * PHASER GAME HUD\n\
  */\n\
+var utils = require('utils');\n\
 \n\
 module.exports = function(game) {\n\
   return {\n\
@@ -3323,17 +3339,16 @@ module.exports = function(game) {\n\
 \n\
 \n\
     init: function(){\n\
-      console.log('hud#init');\n\
+      utils.log('hud#init');\n\
       this.t = game.add.text(10, 10, this.text(), this.style);\n\
       return this;\n\
     },\n\
 \n\
 \n\
     update: function(status) {\n\
-      console.log('hud#update', status);\n\
+      utils.log('hud#update', status);\n\
       if (status) {\n\
         this.t.setText(this.text(status));\n\
-        console.log(this.t);\n\
       }\n\
       return this;\n\
     }\n\
@@ -3354,6 +3369,7 @@ require.register("boot/index.js", Function("exports, require, module",
   var socket = window.io.connect(window.location.hostname);\n\
   var Enemy = require('enemy');\n\
   var HUD = require('hud');\n\
+  var utils = require('utils');\n\
 \n\
   domready(function() {\n\
 \n\
@@ -3369,7 +3385,7 @@ require.register("boot/index.js", Function("exports, require, module",
      * @return {[type]} [description]\n\
      */\n\
     function preload () {\n\
-      console.log('>> preload');\n\
+      utils.log('>> phaser preload');\n\
       game.load.image('logo', 'img/phaser.png');\n\
     }\n\
 \n\
@@ -3378,7 +3394,7 @@ require.register("boot/index.js", Function("exports, require, module",
      */\n\
 \n\
     function create () {\n\
-      console.log('>> create');\n\
+      utils.log('>> phaser create');\n\
 \n\
       var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');\n\
       logo.anchor.setTo(0.5, 0.5);\n\
@@ -3408,7 +3424,7 @@ require.register("boot/index.js", Function("exports, require, module",
      * The update (and render) functions are called every frame. So on a desktop that'd be around 60 time per second. In update this is where you'd do things like poll for input to move a player, check for object collision, etc. It's the heart of your game really.\n\
      */\n\
     function update() {\n\
-      // console.log('>> update');\n\
+      // utils.log('>> update');\n\
     }\n\
 \n\
 \n\
@@ -3416,7 +3432,7 @@ require.register("boot/index.js", Function("exports, require, module",
      * The render function is called AFTER the WebGL/canvas render has taken place, so consider it the place to apply post-render effects or extra debug overlays. For example when building a game I will often put the game into CANVAS mode only and then use the render function to draw lots of debug info over the top of my game.\n\
      */\n\
     function render() {\n\
-      // console.log('>> render');\n\
+      // utils.log('>> render');\n\
     }\n\
   });\n\
 \n\
@@ -3561,5 +3577,8 @@ require.alias("enemy/index.js", "boot/deps/enemy/index.js");
 require.alias("enemy/index.js", "enemy/index.js");
 require.alias("hud/index.js", "boot/deps/hud/index.js");
 require.alias("hud/index.js", "boot/deps/hud/index.js");
+require.alias("utils/index.js", "hud/deps/utils/index.js");
+require.alias("utils/index.js", "hud/deps/utils/index.js");
+require.alias("utils/index.js", "utils/index.js");
 require.alias("hud/index.js", "hud/index.js");
 require.alias("boot/index.js", "boot/index.js");
