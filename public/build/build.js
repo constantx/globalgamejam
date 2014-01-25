@@ -3430,7 +3430,6 @@ require.register("boot/index.js", Function("exports, require, module",
 \n\
       socket.on(\"game:tweet\", function(tweet) {\n\
         var newEnemy = new Enemy(tweet);\n\
-        emitterEnemy.add(enemySprite);\n\
       });\n\
 \n\
     }\n\
@@ -3444,10 +3443,6 @@ require.register("boot/index.js", Function("exports, require, module",
 \n\
       // make enemy collidable\n\
       game.physics.collide(emitterEnemy, emitterEnemy);\n\
-\n\
-      // rotate the angle to spray everywhere\n\
-      // emitterEnemy.angle += 0.1;\n\
-      // if(emitterEnemy.angle >=360) emitterEnemy.angle = 0;\n\
     }\n\
 \n\
 \n\

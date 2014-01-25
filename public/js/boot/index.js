@@ -71,7 +71,6 @@
 
       socket.on("game:tweet", function(tweet) {
         var newEnemy = new Enemy(tweet);
-        emitterEnemy.add(enemySprite);
       });
 
     }
@@ -85,10 +84,6 @@
 
       // make enemy collidable
       game.physics.collide(emitterEnemy, emitterEnemy);
-
-      // rotate the angle to spray everywhere
-      // emitterEnemy.angle += 0.1;
-      // if(emitterEnemy.angle >=360) emitterEnemy.angle = 0;
     }
 
 
