@@ -3250,6 +3250,45 @@ exports.off = function(event, selector, fn, capture){\n\
 };\n\
 //@ sourceURL=component-dom/lib/events.js"
 ));
+require.register("enemy/index.js", Function("exports, require, module",
+"/**\n\
+ * module for an enemy model\n\
+ * @param  {[type]} tweet [description]\n\
+ * @return {[type]}       [description]\n\
+ */\n\
+\n\
+function shuffle(str) {\n\
+  var a = str.split(\"\"),\n\
+      n = a.length;\n\
+\n\
+  for(var i = n - 1; i > 0; i--) {\n\
+      var j = Math.floor(Math.random() * (i + 1));\n\
+      var tmp = a[i];\n\
+      a[i] = a[j];\n\
+      a[j] = tmp;\n\
+  }\n\
+  return a.join(\"\");\n\
+}\n\
+\n\
+/**\n\
+ * make and return enemy\n\
+ * @param  {Object} tweet twitter API tweet object\n\
+ * @return {Object} an enemy\n\
+ */\n\
+module.exports = function(tweet){\n\
+  var user = tweet.user;\n\
+  var name = shuffle(user.screen_name);\n\
+  var hp = user.followers_count;\n\
+  var mp = user.friends_count;\n\
+\n\
+  return {\n\
+    name: name,\n\
+    hp: hp,\n\
+    mp: mp\n\
+  };\n\
+};\n\
+//@ sourceURL=enemy/index.js"
+));
 require.register("boot/index.js", Function("exports, require, module",
 "/* jshint indent:2, devel:true, browser:true */\n\
 /*global Phaser:true */\n\
@@ -3261,6 +3300,7 @@ require.register("boot/index.js", Function("exports, require, module",
   var dom = require('dom');\n\
   var domready = require('domready');\n\
   var socket = window.io.connect(window.location.hostname);\n\
+  var Enemy = require('enemy');\n\
 \n\
   domready(function() {\n\
 \n\
@@ -3300,6 +3340,10 @@ require.register("boot/index.js", Function("exports, require, module",
           var t = game.add.text(10, 10, text, style);\n\
         }\n\
       });\n\
+\n\
+      socket.on(\"game:tweet\", function(tweet) {\n\
+        var newEnemy = new Enemy(tweet);\n\
+      });\n\
     }\n\
 \n\
 \n\
@@ -3307,7 +3351,7 @@ require.register("boot/index.js", Function("exports, require, module",
      * The update (and render) functions are called every frame. So on a desktop that'd be around 60 time per second. In update this is where you'd do things like poll for input to move a player, check for object collision, etc. It's the heart of your game really.\n\
      */\n\
     function update() {\n\
-      console.log('>> update');\n\
+      // console.log('>> update');\n\
     }\n\
 \n\
 \n\
@@ -3315,13 +3359,15 @@ require.register("boot/index.js", Function("exports, require, module",
      * The render function is called AFTER the WebGL/canvas render has taken place, so consider it the place to apply post-render effects or extra debug overlays. For example when building a game I will often put the game into CANVAS mode only and then use the render function to draw lots of debug info over the top of my game.\n\
      */\n\
     function render() {\n\
-      console.log('>> render');\n\
+      // console.log('>> render');\n\
     }\n\
   });\n\
 \n\
 }());\n\
 //@ sourceURL=boot/index.js"
 ));
+
+
 
 
 
@@ -3446,4 +3492,7 @@ require.alias("matthewp-keys/index.js", "component-dom/deps/keys/index.js");
 require.alias("matthewp-keys/index.js", "matthewp-keys/index.js");
 require.alias("matthewp-text/index.js", "component-dom/deps/text/index.js");
 
+require.alias("enemy/index.js", "boot/deps/enemy/index.js");
+require.alias("enemy/index.js", "boot/deps/enemy/index.js");
+require.alias("enemy/index.js", "enemy/index.js");
 require.alias("boot/index.js", "boot/index.js");

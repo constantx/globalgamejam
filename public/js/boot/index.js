@@ -8,6 +8,7 @@
   var dom = require('dom');
   var domready = require('domready');
   var socket = window.io.connect(window.location.hostname);
+  var Enemy = require('enemy');
 
   domready(function() {
 
@@ -47,6 +48,10 @@
           var t = game.add.text(10, 10, text, style);
         }
       });
+
+      socket.on("game:tweet", function(tweet) {
+        var newEnemy = new Enemy(tweet);
+      });
     }
 
 
@@ -54,7 +59,7 @@
      * The update (and render) functions are called every frame. So on a desktop that'd be around 60 time per second. In update this is where you'd do things like poll for input to move a player, check for object collision, etc. It's the heart of your game really.
      */
     function update() {
-      console.log('>> update');
+      // console.log('>> update');
     }
 
 
@@ -62,7 +67,7 @@
      * The render function is called AFTER the WebGL/canvas render has taken place, so consider it the place to apply post-render effects or extra debug overlays. For example when building a game I will often put the game into CANVAS mode only and then use the render function to draw lots of debug info over the top of my game.
      */
     function render() {
-      console.log('>> render');
+      // console.log('>> render');
     }
   });
 
