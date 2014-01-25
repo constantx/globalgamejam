@@ -3,35 +3,45 @@
 (function() {
   "use strict";
 
-  var IO, PORT, app, express, fs, http, path, routes, server, players;
-
   require('coffee-script');
 
   require('colors');
 
-  express = require("express");
-
-  http = require("http");
-
-  path = require("path");
-
-  fs = require("fs");
-
-  routes = require("./routes");
-
-  app = express();
-
-  server = http.createServer(app);
-
-  IO = require("socket.io").listen(server);
-
-  PORT = process.env.PORT || 5000;
+  var express = require("express");
+  var http = require("http");
+  var path = require("path");
+  var fs = require("fs");
+  var app = express();
+  var server = http.createServer(app);
+  var IO = require("socket.io").listen(server);
+  var PORT = process.env.PORT || 5000;
+  var routes = require("./routes");
 
   // keep track of players with sockets
-  players = {};
+  var players = {};
+
+  // twitter API client
+  // https://github.com/ttezel/twit
+  var Twit = require('twit');
+
+  // create a new twitter client
+  var T = new Twit({
+    consumer_key:         process.env.consumer_key,
+    consumer_secret:      process.env.consumer_secret,
+    access_token:         process.env.access_token,
+    access_token_secret:  process.env.access_token_secret
+  })
+
+  //  filter the twitter public stream by the word 'mango'.
+  var stream = T.stream('statuses/filter', { track: 'apple' });
+
+  stream.on('tweet', function (tweet) {
+    console.log(tweet.text);
+  });
+
 
   app.configure(function() {
-    app.set("port", process.env.PORT || PORT);
+    app.set("port", PORT);
     app.set("views", "" + __dirname + "/views");
     app.set("view engine", "jade");
     app.use(express.favicon());
