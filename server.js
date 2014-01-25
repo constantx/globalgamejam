@@ -23,8 +23,7 @@
   // keep track of players with sockets
   var players = {};
 
-  // twitter API client
-  // https://github.com/ttezel/twit
+  // twitter API client: https://github.com/ttezel/twit
   var Twit = require('twit');
 
   // create a new twitter client
