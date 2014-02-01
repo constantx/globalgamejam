@@ -3373,7 +3373,9 @@ require.register("boot/index.js", Function("exports, require, module",
 \n\
   domready(function() {\n\
 \n\
-    var game = new Phaser.Game(800*2, 640*2, Phaser.CANVAS, 'game-container', {\n\
+    var wWidth = document.body.clientWidth;\n\
+    var wHeight = document.body.clientHeight;\n\
+    var game = new Phaser.Game(wWidth*2, wHeight*2, Phaser.CANVAS, 'game-container', {\n\
       preload: preload,\n\
       create: create,\n\
       update: update,\n\
