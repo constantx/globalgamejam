@@ -45,14 +45,14 @@
       enemyStream.forEach(function(stream, i){
 
         // emitter(x, y, maxParticles) → {Phaser.Emitter}
-        emitterEnemy = game.add.emitter(game.world.width/3*(i+1), 0);
+        emitterEnemy = game.add.emitter(game.world.centerX, game.world.centerY);
 
         // makeParticles(keys, frames, quantity, collide, collideWorldBounds)
         emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);
         emitterEnemy.minParticleSpeed.setTo(-500, -100);
         emitterEnemy.maxParticleSpeed.setTo(200, 500);
         emitterEnemy.maxRotation = 10*(i+1);
-        emitterEnemy.gravity = 30*(i+1);
+        emitterEnemy.gravity = 0;
         emitterEnemy.bounce.setTo(0.4, 0.4);
         emitterEnemy.angularDrag = 90;
 

@@ -3404,14 +3404,14 @@ require.register("boot/index.js", Function("exports, require, module",
       enemyStream.forEach(function(stream, i){\n\
 \n\
         // emitter(x, y, maxParticles) → {Phaser.Emitter}\n\
-        emitterEnemy = game.add.emitter(game.world.width/3*(i+1), 0);\n\
+        emitterEnemy = game.add.emitter(game.world.centerX, game.world.centerY);\n\
 \n\
         // makeParticles(keys, frames, quantity, collide, collideWorldBounds)\n\
         emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);\n\
         emitterEnemy.minParticleSpeed.setTo(-500, -100);\n\
         emitterEnemy.maxParticleSpeed.setTo(200, 500);\n\
         emitterEnemy.maxRotation = 10*(i+1);\n\
-        emitterEnemy.gravity = 30*(i+1);\n\
+        emitterEnemy.gravity = 0;\n\
         emitterEnemy.bounce.setTo(0.4, 0.4);\n\
         emitterEnemy.angularDrag = 90;\n\
 \n\
