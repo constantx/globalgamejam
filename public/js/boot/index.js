@@ -11,7 +11,6 @@
   var Enemy = require('enemy');
   var HUD = require('hud');
   var utils = require('utils');
-  var emitterEnemy;
 
   domready(function() {
 
@@ -36,22 +35,30 @@
      * The create function is called automatically once the preload has finished
      */
 
+    var enemyStream = ['stream1', 'stream2'];
+    var emitterEnemy;
+
     function create () {
       utils.log('>> phaser create');
 
-      // emitter(x, y, maxParticles) → {Phaser.Emitter}
-      emitterEnemy = game.add.emitter(game.world.centerX, 0);
-      // makeParticles(keys, frames, quantity, collide, collideWorldBounds)
-      emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);
-      emitterEnemy.minParticleSpeed.setTo(-500, -100);
-      emitterEnemy.maxParticleSpeed.setTo(200, 500);
-      emitterEnemy.maxRotation = 10;
-      emitterEnemy.gravity = 20;
-      emitterEnemy.bounce.setTo(0.2, 0.2);
-      emitterEnemy.angularDrag = 180;
 
-      // start(explode, lifespan, frequency, quantity)
-      emitterEnemy.start(false, 3000, 300);
+      enemyStream.forEach(function(stream, i){
+
+        // emitter(x, y, maxParticles) → {Phaser.Emitter}
+        emitterEnemy = game.add.emitter(game.world.width/3*(i+1), 0);
+
+        // makeParticles(keys, frames, quantity, collide, collideWorldBounds)
+        emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);
+        emitterEnemy.minParticleSpeed.setTo(-500, -100);
+        emitterEnemy.maxParticleSpeed.setTo(200, 500);
+        emitterEnemy.maxRotation = 10*(i+1);
+        emitterEnemy.gravity = 30*(i+1);
+        emitterEnemy.bounce.setTo(0.4, 0.4);
+        emitterEnemy.angularDrag = 90;
+
+        // start(explode, lifespan, frequency, quantity)
+        emitterEnemy.start(false, 10000, 300);
+      });
 
       // create the hud
       var hud = new HUD(game).init();
@@ -71,6 +78,7 @@
 
       socket.on("game:tweet", function(tweet) {
         var newEnemy = new Enemy(tweet);
+        utils.log("newEnemy ", newEnemy);
       });
 
     }

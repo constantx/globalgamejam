@@ -3370,7 +3370,6 @@ require.register("boot/index.js", Function("exports, require, module",
   var Enemy = require('enemy');\n\
   var HUD = require('hud');\n\
   var utils = require('utils');\n\
-  var emitterEnemy;\n\
 \n\
   domready(function() {\n\
 \n\
@@ -3395,22 +3394,30 @@ require.register("boot/index.js", Function("exports, require, module",
      * The create function is called automatically once the preload has finished\n\
      */\n\
 \n\
+    var enemyStream = ['stream1', 'stream2'];\n\
+    var emitterEnemy;\n\
+\n\
     function create () {\n\
       utils.log('>> phaser create');\n\
 \n\
-      // emitter(x, y, maxParticles) → {Phaser.Emitter}\n\
-      emitterEnemy = game.add.emitter(game.world.centerX, 0);\n\
-      // makeParticles(keys, frames, quantity, collide, collideWorldBounds)\n\
-      emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);\n\
-      emitterEnemy.minParticleSpeed.setTo(-500, -100);\n\
-      emitterEnemy.maxParticleSpeed.setTo(200, 500);\n\
-      emitterEnemy.maxRotation = 10;\n\
-      emitterEnemy.gravity = 20;\n\
-      emitterEnemy.bounce.setTo(0.2, 0.2);\n\
-      emitterEnemy.angularDrag = 180;\n\
 \n\
-      // start(explode, lifespan, frequency, quantity)\n\
-      emitterEnemy.start(false, 3000, 300);\n\
+      enemyStream.forEach(function(stream, i){\n\
+\n\
+        // emitter(x, y, maxParticles) → {Phaser.Emitter}\n\
+        emitterEnemy = game.add.emitter(game.world.width/3*(i+1), 0);\n\
+\n\
+        // makeParticles(keys, frames, quantity, collide, collideWorldBounds)\n\
+        emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);\n\
+        emitterEnemy.minParticleSpeed.setTo(-500, -100);\n\
+        emitterEnemy.maxParticleSpeed.setTo(200, 500);\n\
+        emitterEnemy.maxRotation = 10*(i+1);\n\
+        emitterEnemy.gravity = 30*(i+1);\n\
+        emitterEnemy.bounce.setTo(0.4, 0.4);\n\
+        emitterEnemy.angularDrag = 90;\n\
+\n\
+        // start(explode, lifespan, frequency, quantity)\n\
+        emitterEnemy.start(false, 10000, 300);\n\
+      });\n\
 \n\
       // create the hud\n\
       var hud = new HUD(game).init();\n\
@@ -3430,6 +3437,7 @@ require.register("boot/index.js", Function("exports, require, module",
 \n\
       socket.on(\"game:tweet\", function(tweet) {\n\
         var newEnemy = new Enemy(tweet);\n\
+        utils.log(\"newEnemy \", newEnemy);\n\
       });\n\
 \n\
     }\n\

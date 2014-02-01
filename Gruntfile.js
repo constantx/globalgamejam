@@ -119,9 +119,18 @@
       }
     });
 
+    /**
+     * REQUIRES ALL THE GRUNTS
+     */
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-    grunt.registerTask("compile", ["concurrent:compile", 'notify:compiled']);
+    /**
+     * TASKS
+     */
+    grunt.registerTask("compile", [
+      "concurrent:compile",
+      "notify:compiled"
+    ]);
 
     grunt.registerTask("build", ["compile"]);
 
