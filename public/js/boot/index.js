@@ -51,15 +51,17 @@
 
         // makeParticles(keys, frames, quantity, collide, collideWorldBounds)
         emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);
-        emitterEnemy.minParticleSpeed.setTo(-500, -100);
-        emitterEnemy.maxParticleSpeed.setTo(200, 500);
-        emitterEnemy.maxRotation = 10*(i+1);
+        emitterEnemy.minParticleSpeed.setTo(-500, -500);
+        emitterEnemy.maxParticleSpeed.setTo(500, 500);
+        emitterEnemy.maxParticleScale = 1;
+        emitterEnemy.minParticleScale = 0.5;
+        emitterEnemy.maxRotation = 10;
         emitterEnemy.gravity = 0;
         emitterEnemy.bounce.setTo(0.4, 0.4);
-        emitterEnemy.angularDrag = 90;
+        emitterEnemy.angularDrag = 1;
 
         // start(explode, lifespan, frequency, quantity)
-        emitterEnemy.start(false, 10000, 300);
+        emitterEnemy.start(false, 5000, 1000);
       });
 
       // create the hud
@@ -89,11 +91,17 @@
     /**
      * The update (and render) functions are called every frame. So on a desktop that'd be around 60 time per second. In update this is where you'd do things like poll for input to move a player, check for object collision, etc. It's the heart of your game really.
      */
+    var enemyDoF;
+
     function update() {
       utils.log('>> update');
 
       // make enemy collidable
       game.physics.collide(emitterEnemy, emitterEnemy);
+
+      enemyDoF = Math.random(1);
+      emitterEnemy.scale = enemyDoF;
+      emitterEnemy.gravity = Math.random(100);
     }
 
 

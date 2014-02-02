@@ -3410,15 +3410,17 @@ require.register("boot/index.js", Function("exports, require, module",
 \n\
         // makeParticles(keys, frames, quantity, collide, collideWorldBounds)\n\
         emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);\n\
-        emitterEnemy.minParticleSpeed.setTo(-500, -100);\n\
-        emitterEnemy.maxParticleSpeed.setTo(200, 500);\n\
-        emitterEnemy.maxRotation = 10*(i+1);\n\
+        emitterEnemy.minParticleSpeed.setTo(-500, -500);\n\
+        emitterEnemy.maxParticleSpeed.setTo(500, 500);\n\
+        emitterEnemy.maxParticleScale = 1;\n\
+        emitterEnemy.minParticleScale = 0.5;\n\
+        emitterEnemy.maxRotation = 10;\n\
         emitterEnemy.gravity = 0;\n\
         emitterEnemy.bounce.setTo(0.4, 0.4);\n\
-        emitterEnemy.angularDrag = 90;\n\
+        emitterEnemy.angularDrag = 1;\n\
 \n\
         // start(explode, lifespan, frequency, quantity)\n\
-        emitterEnemy.start(false, 10000, 300);\n\
+        emitterEnemy.start(false, 5000, 1000);\n\
       });\n\
 \n\
       // create the hud\n\
@@ -3448,11 +3450,17 @@ require.register("boot/index.js", Function("exports, require, module",
     /**\n\
      * The update (and render) functions are called every frame. So on a desktop that'd be around 60 time per second. In update this is where you'd do things like poll for input to move a player, check for object collision, etc. It's the heart of your game really.\n\
      */\n\
+    var enemyDoF;\n\
+\n\
     function update() {\n\
       utils.log('>> update');\n\
 \n\
       // make enemy collidable\n\
       game.physics.collide(emitterEnemy, emitterEnemy);\n\
+\n\
+      enemyDoF = Math.random(1);\n\
+      emitterEnemy.scale = enemyDoF;\n\
+      emitterEnemy.gravity = Math.random(100);\n\
     }\n\
 \n\
 \n\
