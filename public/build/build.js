@@ -1810,8 +1810,7 @@ function type(el) {\n\
 //@ sourceURL=component-value/index.js"
 ));
 require.register("component-query/index.js", Function("exports, require, module",
-"\n\
-function one(selector, el) {\n\
+"function one(selector, el) {\n\
   return el.querySelector(selector);\n\
 }\n\
 \n\
@@ -1830,6 +1829,7 @@ exports.engine = function(obj){\n\
   if (!obj.all) throw new Error('.all callback required');\n\
   one = obj.one;\n\
   exports.all = obj.all;\n\
+  return exports;\n\
 };\n\
 //@ sourceURL=component-query/index.js"
 ));
@@ -3010,6 +3010,18 @@ exports.clone = function() {\n\
 \n\
   return this.dom(out);\n\
 };\n\
+\n\
+/**\n\
+ * Focus the first dom element in our list.\n\
+ * \n\
+ * @return {List} self\n\
+ * @api public\n\
+ */\n\
+\n\
+exports.focus = function(){\n\
+  this[0].focus();\n\
+  return this;\n\
+};\n\
 //@ sourceURL=component-dom/lib/manipulate.js"
 ));
 require.register("component-dom/lib/classes.js", Function("exports, require, module",
@@ -3453,13 +3465,12 @@ require.register("boot/index.js", Function("exports, require, module",
         emitterEnemy.maxParticleScale = 0.2;\n\
         emitterEnemy.minParticleScale = 0.4;\n\
         emitterEnemy.minRotation = 0;\n\
-        emitterEnemy.maxRotation = 10;\n\
+        emitterEnemy.maxRotation = 45;\n\
         emitterEnemy.gravity = 0;\n\
         emitterEnemy.bounce.setTo(0.5, 0.5);\n\
-        emitterEnemy.angularDrag = 1;\n\
 \n\
         // start(explode, lifespan, frequency, quantity)\n\
-        emitterEnemy.start(false, 1000, 800);\n\
+        emitterEnemy.start(false, 3000, 800);\n\
       });\n\
 \n\
       // create the hud\n\
