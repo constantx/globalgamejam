@@ -3413,14 +3413,14 @@ require.register("boot/index.js", Function("exports, require, module",
         emitterEnemy.minParticleSpeed.setTo(-500, -500);\n\
         emitterEnemy.maxParticleSpeed.setTo(500, 500);\n\
         emitterEnemy.maxParticleScale = 1;\n\
-        emitterEnemy.minParticleScale = 0.5;\n\
+        emitterEnemy.minParticleScale = 0.1;\n\
         emitterEnemy.maxRotation = 10;\n\
         emitterEnemy.gravity = 0;\n\
-        emitterEnemy.bounce.setTo(0.4, 0.4);\n\
+        emitterEnemy.bounce.setTo(0.5, 0.5);\n\
         emitterEnemy.angularDrag = 1;\n\
 \n\
         // start(explode, lifespan, frequency, quantity)\n\
-        emitterEnemy.start(false, 5000, 1000);\n\
+        emitterEnemy.start(false, 20000, 500);\n\
       });\n\
 \n\
       // create the hud\n\
@@ -3458,9 +3458,9 @@ require.register("boot/index.js", Function("exports, require, module",
       // make enemy collidable\n\
       game.physics.collide(emitterEnemy, emitterEnemy);\n\
 \n\
-      enemyDoF = Math.random(1);\n\
+      enemyDoF = Math.random();\n\
       emitterEnemy.scale = enemyDoF;\n\
-      emitterEnemy.gravity = Math.random(100);\n\
+      emitterEnemy.gravity = Math.random();\n\
     }\n\
 \n\
 \n\

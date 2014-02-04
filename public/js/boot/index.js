@@ -54,14 +54,14 @@
         emitterEnemy.minParticleSpeed.setTo(-500, -500);
         emitterEnemy.maxParticleSpeed.setTo(500, 500);
         emitterEnemy.maxParticleScale = 1;
-        emitterEnemy.minParticleScale = 0.5;
+        emitterEnemy.minParticleScale = 0.1;
         emitterEnemy.maxRotation = 10;
         emitterEnemy.gravity = 0;
-        emitterEnemy.bounce.setTo(0.4, 0.4);
+        emitterEnemy.bounce.setTo(0.5, 0.5);
         emitterEnemy.angularDrag = 1;
 
         // start(explode, lifespan, frequency, quantity)
-        emitterEnemy.start(false, 5000, 1000);
+        emitterEnemy.start(false, 20000, 500);
       });
 
       // create the hud
@@ -99,9 +99,9 @@
       // make enemy collidable
       game.physics.collide(emitterEnemy, emitterEnemy);
 
-      enemyDoF = Math.random(1);
+      enemyDoF = Math.random();
       emitterEnemy.scale = enemyDoF;
-      emitterEnemy.gravity = Math.random(100);
+      emitterEnemy.gravity = Math.random();
     }
 
 
