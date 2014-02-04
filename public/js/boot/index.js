@@ -97,10 +97,9 @@
         emitterEnemy.maxRotation = 45;
         emitterEnemy.gravity = 0;
         emitterEnemy.bounce.setTo(0.5, 0.5);
-        emitterEnemy.angularDrag = 1;
 
         // start(explode, lifespan, frequency, quantity)
-        emitterEnemy.start(false, 3000, 500);
+        emitterEnemy.start(false, 3000, 800);
       });
 
       // create the hud
