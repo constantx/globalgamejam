@@ -3389,7 +3389,25 @@ require.register("boot/index.js", Function("exports, require, module",
     function preload () {\n\
       utils.log('>> phaser preload');\n\
 \n\
-      game.load.image('space-invader', 'img/enemy.png');\n\
+      game.load.image('invader-space', 'img/enemy.png');\n\
+\n\
+      game.load.image('invader-amy', 'img/amy-ngai.jpg');\n\
+      game.load.image('invader-caleb', 'img/caleb-lai.jpg');\n\
+      game.load.image('invader-christopher', 'img/christopher-scott.jpg');\n\
+      game.load.image('invader-devin', 'img/devin-mcinnis.jpg');\n\
+      game.load.image('invader-dieter', 'img/dieter-shirley.jpg');\n\
+      game.load.image('invader-eric', 'img/eric-lin.jpg');\n\
+      game.load.image('invader-fabiano', 'img/fabiano-soriani.jpg');\n\
+      game.load.image('invader-geo', 'img/geoffrey-tisserand.jpg');\n\
+      game.load.image('invader-jessica', 'img/jessica-turner.jpg');\n\
+      game.load.image('invader-leo', 'img/leo-chiqing-zhang.jpg');\n\
+      game.load.image('invader-marc', 'img/marc-kuo.jpg');\n\
+      game.load.image('invader-nick', 'img/nick-chow.jpg');\n\
+      game.load.image('invader-pierre', 'img/pierre-beugnot.jpg');\n\
+      game.load.image('invader-roham', 'img/roham-gharegozlou.jpg');\n\
+      game.load.image('invader-ryan', 'img/ryan-naayem.jpg');\n\
+      game.load.image('invader-sam', 'img/sam-gharegozlou.jpg');\n\
+      game.load.image('invader-t', 'img/t-truong-nguyen.jpg');\n\
     }\n\
 \n\
     /**\n\
@@ -3409,12 +3427,33 @@ require.register("boot/index.js", Function("exports, require, module",
         emitterEnemy = game.add.emitter(game.world.centerX, game.world.centerY);\n\
 \n\
         // makeParticles(keys, frames, quantity, collide, collideWorldBounds)\n\
-        emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);\n\
+        emitterEnemy.makeParticles([\n\
+          'invader-space',\n\
+          \"invader-amy\",\n\
+          \"invader-caleb\",\n\
+          \"invader-christopher\",\n\
+          \"invader-devin\",\n\
+          \"invader-dieter\",\n\
+          \"invader-eric\",\n\
+          \"invader-fabiano\",\n\
+          \"invader-geo\",\n\
+          \"invader-jessica\",\n\
+          \"invader-leo\",\n\
+          \"invader-marc\",\n\
+          \"invader-nick\",\n\
+          \"invader-pierre\",\n\
+          \"invader-roham\",\n\
+          \"invader-ryan\",\n\
+          \"invader-sam\",\n\
+          \"invader-t\"\n\
+        ], 0, 250, true, true);\n\
+\n\
         emitterEnemy.minParticleSpeed.setTo(-500, -500);\n\
         emitterEnemy.maxParticleSpeed.setTo(500, 500);\n\
-        emitterEnemy.maxParticleScale = 1;\n\
-        emitterEnemy.minParticleScale = 0.1;\n\
-        emitterEnemy.maxRotation = 10;\n\
+        emitterEnemy.maxParticleScale = 0.05;\n\
+        emitterEnemy.minParticleScale = 0.2;\n\
+        emitterEnemy.minRotation = 0;\n\
+        emitterEnemy.maxRotation = 45;\n\
         emitterEnemy.gravity = 0;\n\
         emitterEnemy.bounce.setTo(0.5, 0.5);\n\
         emitterEnemy.angularDrag = 1;\n\

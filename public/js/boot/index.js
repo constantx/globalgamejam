@@ -30,7 +30,25 @@
     function preload () {
       utils.log('>> phaser preload');
 
-      game.load.image('space-invader', 'img/enemy.png');
+      game.load.image('invader-space', 'img/enemy.png');
+
+      game.load.image('invader-amy', 'img/amy-ngai.jpg');
+      game.load.image('invader-caleb', 'img/caleb-lai.jpg');
+      game.load.image('invader-christopher', 'img/christopher-scott.jpg');
+      game.load.image('invader-devin', 'img/devin-mcinnis.jpg');
+      game.load.image('invader-dieter', 'img/dieter-shirley.jpg');
+      game.load.image('invader-eric', 'img/eric-lin.jpg');
+      game.load.image('invader-fabiano', 'img/fabiano-soriani.jpg');
+      game.load.image('invader-geo', 'img/geoffrey-tisserand.jpg');
+      game.load.image('invader-jessica', 'img/jessica-turner.jpg');
+      game.load.image('invader-leo', 'img/leo-chiqing-zhang.jpg');
+      game.load.image('invader-marc', 'img/marc-kuo.jpg');
+      game.load.image('invader-nick', 'img/nick-chow.jpg');
+      game.load.image('invader-pierre', 'img/pierre-beugnot.jpg');
+      game.load.image('invader-roham', 'img/roham-gharegozlou.jpg');
+      game.load.image('invader-ryan', 'img/ryan-naayem.jpg');
+      game.load.image('invader-sam', 'img/sam-gharegozlou.jpg');
+      game.load.image('invader-t', 'img/t-truong-nguyen.jpg');
     }
 
     /**
@@ -50,12 +68,33 @@
         emitterEnemy = game.add.emitter(game.world.centerX, game.world.centerY);
 
         // makeParticles(keys, frames, quantity, collide, collideWorldBounds)
-        emitterEnemy.makeParticles(['space-invader'], 0, 250, true, true);
+        emitterEnemy.makeParticles([
+          'invader-space',
+          "invader-amy",
+          "invader-caleb",
+          "invader-christopher",
+          "invader-devin",
+          "invader-dieter",
+          "invader-eric",
+          "invader-fabiano",
+          "invader-geo",
+          "invader-jessica",
+          "invader-leo",
+          "invader-marc",
+          "invader-nick",
+          "invader-pierre",
+          "invader-roham",
+          "invader-ryan",
+          "invader-sam",
+          "invader-t"
+        ], 0, 250, true, true);
+
         emitterEnemy.minParticleSpeed.setTo(-500, -500);
         emitterEnemy.maxParticleSpeed.setTo(500, 500);
-        emitterEnemy.maxParticleScale = 1;
-        emitterEnemy.minParticleScale = 0.1;
-        emitterEnemy.maxRotation = 10;
+        emitterEnemy.maxParticleScale = 0.05;
+        emitterEnemy.minParticleScale = 0.2;
+        emitterEnemy.minRotation = 0;
+        emitterEnemy.maxRotation = 45;
         emitterEnemy.gravity = 0;
         emitterEnemy.bounce.setTo(0.5, 0.5);
         emitterEnemy.angularDrag = 1;
