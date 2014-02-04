@@ -3449,7 +3449,7 @@ require.register("boot/index.js", Function("exports, require, module",
         ], 0, 250, true, true);\n\
 \n\
         emitterEnemy.minParticleSpeed.setTo(-500, -500);\n\
-        emitterEnemy.maxParticleSpeed.setTo(3000, 3000);\n\
+        emitterEnemy.maxParticleSpeed.setTo(1000, 1000);\n\
         emitterEnemy.maxParticleScale = 0.15;\n\
         emitterEnemy.minParticleScale = 0.3;\n\
         emitterEnemy.minRotation = 0;\n\

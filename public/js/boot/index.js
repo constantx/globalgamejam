@@ -90,7 +90,7 @@
         ], 0, 250, true, true);
 
         emitterEnemy.minParticleSpeed.setTo(-500, -500);
-        emitterEnemy.maxParticleSpeed.setTo(3000, 3000);
+        emitterEnemy.maxParticleSpeed.setTo(1000, 1000);
         emitterEnemy.maxParticleScale = 0.15;
         emitterEnemy.minParticleScale = 0.3;
         emitterEnemy.minRotation = 0;
