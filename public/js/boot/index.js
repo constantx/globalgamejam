@@ -100,7 +100,7 @@
         emitterEnemy.angularDrag = 1;
 
         // start(explode, lifespan, frequency, quantity)
-        emitterEnemy.start(false, 20000, 500);
+        emitterEnemy.start(false, 10000, 800);
       });
 
       // create the hud
