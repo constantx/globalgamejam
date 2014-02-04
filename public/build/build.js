@@ -3461,16 +3461,16 @@ require.register("boot/index.js", Function("exports, require, module",
         ], 0, 250, true, true);\n\
 \n\
         emitterEnemy.minParticleSpeed.setTo(-500, -500);\n\
-        emitterEnemy.maxParticleSpeed.setTo(500, 500);\n\
-        emitterEnemy.maxParticleScale = 0.2;\n\
-        emitterEnemy.minParticleScale = 0.4;\n\
+        emitterEnemy.maxParticleSpeed.setTo(1000, 1000);\n\
+        emitterEnemy.maxParticleScale = 0.15;\n\
+        emitterEnemy.minParticleScale = 0.3;\n\
         emitterEnemy.minRotation = 0;\n\
-        emitterEnemy.maxRotation = 45;\n\
+        emitterEnemy.maxRotation = 10;\n\
         emitterEnemy.gravity = 0;\n\
         emitterEnemy.bounce.setTo(0.5, 0.5);\n\
 \n\
         // start(explode, lifespan, frequency, quantity)\n\
-        emitterEnemy.start(false, 3000, 800);\n\
+        emitterEnemy.start(false, 10000, 500);\n\
       });\n\
 \n\
       // create the hud\n\

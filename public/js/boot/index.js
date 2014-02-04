@@ -90,16 +90,16 @@
         ], 0, 250, true, true);
 
         emitterEnemy.minParticleSpeed.setTo(-500, -500);
-        emitterEnemy.maxParticleSpeed.setTo(500, 500);
-        emitterEnemy.maxParticleScale = 0.2;
-        emitterEnemy.minParticleScale = 0.4;
+        emitterEnemy.maxParticleSpeed.setTo(1000, 1000);
+        emitterEnemy.maxParticleScale = 0.15;
+        emitterEnemy.minParticleScale = 0.3;
         emitterEnemy.minRotation = 0;
-        emitterEnemy.maxRotation = 45;
+        emitterEnemy.maxRotation = 10;
         emitterEnemy.gravity = 0;
         emitterEnemy.bounce.setTo(0.5, 0.5);
 
         // start(explode, lifespan, frequency, quantity)
-        emitterEnemy.start(false, 3000, 800);
+        emitterEnemy.start(false, 10000, 500);
       });
 
       // create the hud
