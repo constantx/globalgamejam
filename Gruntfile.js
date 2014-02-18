@@ -7,7 +7,9 @@
     grunt.initConfig({
       pkg: "<json:package.json>",
       dirs: {
-        app: "."
+        "app": ".",
+        "public": "./public",
+        "client": "./client"
       },
       meta: {
         name: "<%= pkg.name %>",
@@ -66,16 +68,6 @@
           }
         }
       },
-      componentbuild: {
-        build: {
-          options: {
-            dev: true,
-            sourceUrls: true
-          },
-          src: './',
-          dest: '<%= dirs.app %>/public/build/'
-        }
-      },
       notify: {
         compiled: {
           options: {
@@ -96,7 +88,12 @@
           }
         },
         compile: {
-          tasks: ['stylus', 'componentbuild']
+          tasks: ['stylus']
+        }
+      },
+      shell: {
+        "build": {
+          command: "node ./public/src/engine/build.js game.min.js ./public/js/"
         }
       },
       watch: {
@@ -132,7 +129,7 @@
       "notify:compiled"
     ]);
 
-    grunt.registerTask("build", ["compile"]);
+    grunt.registerTask("build", ["compile", "shell:build"]);
 
     grunt.registerTask("default", ["compile", "concurrent:dev"]);
 

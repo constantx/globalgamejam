@@ -1,0 +1,25 @@
+game.module(
+  'game.scenes'
+)
+.require(
+  'engine.scene'
+)
+.body(function() {
+
+  SceneGame = game.Scene.extend({
+    backgroundColor: 0x808080,
+
+    init: function() {
+      var logo = new game.Sprite(game.system.width / 2, game.system.height / 2, 'img/logo.png', {
+        anchor: {x: 0.5, y: 0.5}
+      });
+      this.stage.addChild(logo);
+
+      this.addTween(logo.scale, {x: 1.05, y: 1.05}, 2, {
+        easing: game.Tween.Easing.Quadratic.InOut,
+        loop: game.Tween.Loop.Reverse
+      }).start();
+    }
+  });
+
+});
