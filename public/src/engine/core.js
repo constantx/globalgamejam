@@ -78,7 +78,7 @@ var core = {
     keyboard: null,
     /**
         Device / browser detection.
-        
+
             game.device.iPhone
             game.device.iPhone4
             game.device.iPhone5
@@ -117,7 +117,7 @@ var core = {
     _loadQueue: [],
     _waitForLoad: 0,
     _DOMLoaded: false,
-        
+
     copy: function(object) {
         var l,c,i;
         if(
@@ -143,7 +143,7 @@ var core = {
             return c;
         }
     },
-    
+
     merge: function(original, extended) {
         for(var key in extended) {
             var ext = extended[key];
@@ -164,10 +164,10 @@ var core = {
         }
         return original;
     },
-    
+
     ksort: function(obj) {
         if(!obj || typeof(obj) !== 'object') return false;
-        
+
         var keys = [], result = {}, i;
         for(i in obj ) {
             keys.push(i);
@@ -176,7 +176,7 @@ var core = {
         for(i = 0; i < keys.length; i++ ) {
             result[keys[i]] = obj[keys[i]];
         }
-        
+
         return result;
     },
 
@@ -202,7 +202,6 @@ var core = {
     **/
     fullscreen: function() {
         if(game.system.canvas.requestFullscreen) game.system.canvas.requestFullscreen();
-        if(game.system.canvas.requestFullScreen) game.system.canvas.requestFullScreen();
     },
 
     /**
@@ -247,7 +246,7 @@ var core = {
         name = name || path;
         this.MusicCache[name] = new game.Music(path);
     },
-    
+
     setNocache: function() {
         this.nocache = '?' + Date.now();
     },
@@ -265,7 +264,7 @@ var core = {
     module: function(name, version) {
         if(this._current) throw('Module ' + this._current.name + ' has no body');
         if(this.modules[name] && this.modules[name].body) throw('Module ' + name + ' is already defined');
-        
+
         this._current = {name: name, requires: [], loaded: false, body: null, version: version};
         this.modules[name] = this._current;
         this._loadQueue.push(this._current);
@@ -305,7 +304,7 @@ var core = {
     **/
     start: function(scene, width, height, canvasId) {
         if(this._loadQueue.length > 0) throw 'Engine modules not ready.';
-        
+
         width = width || (game.System.orientation === game.System.PORTRAIT ? 768 : 1024);
         height = height || (game.System.orientation === game.System.PORTRAIT ? 927 : 672);
 
@@ -318,7 +317,7 @@ var core = {
         if(game.Analytics && game.Analytics.id) this.analytics = new game.Analytics(game.Analytics.id);
 
         this.ready = true;
-        
+
         var loader = new game.Loader(scene || SceneGame, this.resources, this.audioResources);
         loader.start();
     },
@@ -349,11 +348,11 @@ var core = {
             return Math.random() * (max - min) + min;
         }
     },
-    
+
     _loadScript: function(name, requiredFrom) {
         this.modules[name] = true;
         this._waitForLoad++;
-        
+
         var path = 'src/' + name.replace(/\./g, '/') + '.js' + this.nocache;
         var script = document.createElement('script');
         script.type = 'text/javascript';
@@ -367,13 +366,13 @@ var core = {
         };
         document.getElementsByTagName('head')[0].appendChild(script);
     },
-    
+
     _loadModules: function() {
         var moduleLoaded, i, j, module, name, dependenciesLoaded;
         for(i = 0; i < game._loadQueue.length; i++) {
             module = game._loadQueue[i];
             dependenciesLoaded = true;
-            
+
             for(j = 0; j < module.requires.length; j++) {
                 name = module.requires[j];
                 if(!game.modules[name]) {
@@ -384,7 +383,7 @@ var core = {
                     dependenciesLoaded = false;
                 }
             }
-            
+
             if(dependenciesLoaded && module.body) {
                 game._loadQueue.splice(i, 1);
                 module.loaded = true;
@@ -393,7 +392,7 @@ var core = {
                 i--;
             }
         }
-        
+
         if(moduleLoaded && this._loadQueue.length > 0) {
             game._loadModules();
         }
@@ -417,7 +416,7 @@ var core = {
             );
         }
     },
-    
+
     _boot: function() {
         if(document.location.href.match(/\?nocache/)) this.setNocache();
 
@@ -426,14 +425,14 @@ var core = {
             width: window.screen.availWidth * this.device.pixelRatio,
             height: window.screen.availHeight * this.device.pixelRatio
         };
-        
+
         this.device.iPhone = /iPhone/i.test(navigator.userAgent);
         this.device.iPhone4 = (this.device.iPhone && this.device.pixelRatio === 2);
         this.device.iPhone5 = (this.device.iPhone && this.device.pixelRatio === 2 && this.device.screen.height === 1096);
 
         this.device.iPad = /iPad/i.test(navigator.userAgent);
         this.device.iPadRetina = (this.device.iPad && this.device.pixelRatio === 2);
-        
+
         this.device.iOS = this.device.iPhone || this.device.iPad;
         this.device.iOS5 = (this.device.iOS && /OS 5/i.test(navigator.userAgent));
         this.device.iOS6 = (this.device.iOS && /OS 6/i.test(navigator.userAgent));
@@ -451,7 +450,7 @@ var core = {
         this.device.ie10 = /MSIE 10/i.test(navigator.userAgent);
         this.device.ie11 = /rv:11.0/i.test(navigator.userAgent);
         this.device.ie = this.device.ie10 || this.device.ie11 || this.device.ie9;
-        
+
         this.device.opera = /Opera/i.test(navigator.userAgent);
         this.device.crosswalk = /Crosswalk/i.test(navigator.userAgent);
         this.device.cocoonJS = !!navigator.isCocoonJS;
@@ -476,7 +475,7 @@ var core = {
             game._loadModules();
         }
     },
-    
+
     _initDOMReady: function() {
         this._initDOMReady = null;
         this._boot();
@@ -593,7 +592,7 @@ core.Class.extend = function(prop) {
     initializing = true;
     var prototype = new this();
     initializing = false;
- 
+
     var makeFn = function(name, fn){
         return function() {
             /**
@@ -620,7 +619,7 @@ core.Class.extend = function(prop) {
             prototype[name] = prop[name];
         }
     }
- 
+
     function Class() {
         if(!initializing) {
             if(this.staticInit) {
@@ -648,7 +647,7 @@ core.Class.extend = function(prop) {
         }
         return this;
     }
-    
+
     Class.prototype = prototype;
     Class.prototype.constructor = Class;
     Class.extend = window.game.Class.extend;
@@ -683,7 +682,7 @@ core.Class.extend = function(prop) {
             }
         }
     };
-    
+
     return Class;
 };
 

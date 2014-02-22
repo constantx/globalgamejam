@@ -1,6 +1,5 @@
-globalgamejam
+whatdaduck
 =============
-
 
 ## setup
 - `$ npm install grunt-cli -g`

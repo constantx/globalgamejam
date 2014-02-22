@@ -2,7 +2,8 @@ game.module(
   'game.scenes'
 )
 .require(
-  'engine.scene'
+  'engine.scene',
+  'enemy.main'
 )
 .body(function() {
 
